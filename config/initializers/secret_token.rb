@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Okayfeed::Application.config.secret_key_base = 'b44c64a9cbd7b1d35d65c30a00ec24f8fc90795135fd6ff81d46237dedbca76c28894aa7994821ccaee99b092a5228e3dd6b436bc7d908f95590c275aca11ddc'
+Okayfeed::Application.config.secret_key_base = ENV["SECRET_TOKEN"]
