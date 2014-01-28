@@ -10,7 +10,7 @@ describe "UserPages" do
 
     let(:submit) { "Sign up" }
 
-    it { should have_title "Sign Up for OkayFeed" }
+    it { should have_title "New user sign up" }
 
     describe "with invalid information" do
       it "should not add a user account" do
