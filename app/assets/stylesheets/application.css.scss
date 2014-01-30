@@ -12,3 +12,9 @@
  *= require_tree .
  */
 @import "bootstrap";
+
+nav {
+  ul {
+    padding-right: 20px;
+  }
+}

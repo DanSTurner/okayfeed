@@ -33,6 +33,13 @@ describe "UserPages" do
         before { click_button submit }
         it { should have_content("Sign out") }
 
+        describe "visit user page" do
+          before do
+            click_link "Profile"
+          end
+          it { should have_content "test@test.com" }
+        end
+
         describe "after signing out" do
           before { click_link "Sign out" }
           it { should have_content("Sign in") }
