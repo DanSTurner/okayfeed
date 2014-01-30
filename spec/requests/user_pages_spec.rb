@@ -28,6 +28,27 @@ describe "UserPages" do
       it "should add a user account" do
         expect { click_button submit }.to change(User, :count)
       end
+
+      describe "after sign up" do
+        before { click_button submit }
+        it { should have_content("Sign out") }
+
+        describe "after signing out" do
+          before { click_link "Sign out" }
+          it { should have_content("Sign in") }
+
+          describe "and then signing in" do
+            before do
+              click_link "Sign in"
+              fill_in "user_email",    with: "test@test.com"
+              fill_in "user_password", with: "password"
+              click_button "Sign in"
+            end
+
+            it { should have_content("Sign out") }
+          end
+        end
+      end
     end
   end
 end
