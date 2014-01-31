@@ -38,6 +38,23 @@ describe "UserPages" do
             click_link "Profile"
           end
           it { should have_content "test@test.com" }
+
+          describe "edit user" do
+            before { click_link "Edit user" }
+
+            it { should have_content("Twitter username") }
+
+            describe "add twitter account" do
+              before do
+                # fill_in "user_email",             with: "test@test.com"
+                fill_in "user_twitter_username",  with: "testtwitteruser"
+                fill_in "user_current_password",  with: "password"
+              end
+              it "should accept a twitter username" do
+                expect { click_button "Update" }.to change{ User.find_by_email("test@test.com").twitter_username }.from(nil).to("testtwitteruser")
+              end
+            end
+          end
         end
 
         describe "after signing out" do

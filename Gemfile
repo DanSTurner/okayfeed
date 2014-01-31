@@ -10,6 +10,7 @@ gem 'turbolinks'
 gem 'figaro', '~> 0.7.0'
 gem 'bootstrap-sass', '3.0.3.0'
 gem 'devise', '~> 3.2.2'
+gem 'twitter', '~> 5.6.0'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'
