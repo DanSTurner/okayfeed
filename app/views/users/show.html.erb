@@ -1,3 +1,11 @@
 <h1><%= @user.email %></h1>
-
-<%= link_to "Edit user", edit_user_registration_path(@user) %>
+<% if @user.twitter_username.nil? or @user.twitter_username == "" %>
+  <p>You have not yet linked a Twitter account</p>
+  <%= link_to "Click here to add one now",edit_user_registration_path(@user) %>
+<% else %>
+  <p>Twitter username: <%= @user.twitter_username %></p>
+  <% @tweets_text.each do |tweet| %>
+    <p><%= tweet %></p>
+  <% end %>
+  <%= link_to "Edit user", edit_user_registration_path(@user) %>
+<% end %>

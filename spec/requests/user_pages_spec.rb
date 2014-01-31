@@ -39,22 +39,31 @@ describe "UserPages" do
           end
           it { should have_content "test@test.com" }
 
-          describe "edit user" do
-            before { click_link "Edit user" }
-
-            it { should have_content("Twitter username") }
-
-            describe "add twitter account" do
-              before do
-                # fill_in "user_email",             with: "test@test.com"
-                fill_in "user_twitter_username",  with: "testtwitteruser"
-                fill_in "user_current_password",  with: "password"
-              end
-              it "should accept a twitter username" do
-                expect { click_button "Update" }.to change{ User.find_by_email("test@test.com").twitter_username }.from(nil).to("testtwitteruser")
-              end
-            end
+          describe "if user has not added a twitter username" do
+            it { should have_content("You have not yet linked a Twitter account") }
           end
+
+          # commented to reduce frequency of hitting twitter api
+          # describe "edit user" do
+          #   before { click_link "add one now" }
+
+          #   it { should have_content("Twitter username") }
+          #   describe "before adding twitter username" do
+          #     it { should have_content("Please provide a Twitter username") }
+          #   end
+
+          #   describe "add twitter account" do
+          #     before do
+          #       fill_in "user_twitter_username",  with: ENV["TEST_TWITTER_USERNAME"]
+          #       fill_in "user_current_password",  with: "password"
+          #       click_button "Update"
+          #       click_link "Profile"
+          #     end
+
+          #     it { should have_content(ENV["TEST_TWEET_CONTENT"]) }
+          #     it { should have_content(ENV["TEST_TWITTER_USERNAME"]) }
+          #   end
+          # end
         end
 
         describe "after signing out" do
