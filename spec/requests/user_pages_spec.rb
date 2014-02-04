@@ -41,6 +41,16 @@ describe "UserPages" do
 
           describe "if user has not added a twitter username" do
             it { should have_content("You have not yet linked a Twitter account") }
+
+            # probably for good reason capybara's not going to automate on a different domain
+            # describe "add twitter authorization" do
+            #   before do
+            #     click_link "add one now"
+            #     click_on "Authorize with Twitter"
+            #   end
+
+            #   it { should have_content "Authorize okayfeed" }
+            # end
           end
 
           # commented to reduce frequency of hitting twitter api
@@ -64,6 +74,7 @@ describe "UserPages" do
           #     it { should have_content(ENV["TEST_TWITTER_USERNAME"]) }
           #   end
           # end
+
         end
 
         describe "after signing out" do

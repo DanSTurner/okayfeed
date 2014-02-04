@@ -11,6 +11,8 @@ gem 'figaro', '~> 0.7.0'
 gem 'bootstrap-sass', '3.0.3.0'
 gem 'devise', '~> 3.2.2'
 gem 'twitter', '~> 5.6.0'
+gem 'omniauth', '~> 1.2.1'
+gem 'omniauth-twitter', '~> 1.0.1'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'

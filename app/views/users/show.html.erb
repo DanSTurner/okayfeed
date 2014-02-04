@@ -1,11 +1,19 @@
 <h1><%= @user.email %></h1>
-<% if @user.twitter_username.nil? or @user.twitter_username == "" %>
+<% if @twitter.uid.nil? or @twitter.uid == "" %>
   <p>You have not yet linked a Twitter account</p>
-  <%= link_to "Click here to add one now",edit_user_registration_path(@user) %>
 <% else %>
-  <p>Twitter username: <%= @user.twitter_username %></p>
   <% @tweets_text.each do |tweet| %>
     <p><%= tweet %></p>
   <% end %>
-  <%= link_to "Edit user", edit_user_registration_path(@user) %>
 <% end %>
+
+<%= "asdf" if current_user == @user %>
+
+<%= link_to "Edit user", edit_user_registration_path(@user) %>
+
+<h3>Authorized accounts</h3>
+<ul>
+  <% unless @twitter.nil? %>
+    <li>Twitter: <%= @twitter.uid %></li>
+  <% end %>
+</ul>
