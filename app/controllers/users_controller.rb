@@ -4,13 +4,16 @@ class UsersController < ApplicationController
 
   def show
     if @user.authorizations.find_by(provider: 'twitter') && twitter_client.user?(@twitter.uid.to_i)
-      tweets = twitter_client.home_timeline
-      @tweets_text = tweets.map { |tweet| tweet.text }
+      @tweets = twitter_client.home_timeline
+      # @tweets_text   = tweets.map { |tweet| tweet.text }
+      # @tweets_author = tweets.map { |tweet| tweet.user.name }
     end
   end
 
   def publish
     content = params[:content]
+    # post = Post.new(params[:provider], content)
+    # post.publish
     twitter_client.update(content)
     redirect_to user_path(@user)
   end
