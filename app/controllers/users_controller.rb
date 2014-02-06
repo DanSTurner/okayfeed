@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :set_authorizations,   only: [:show, :publish]
 
   def show
-    if @user.authorizations.find_by(provider: "twitter") && twitter_client.user?(@twitter.uid.to_i)
+    if @user.authorizations.find_by(provider: 'twitter') && twitter_client.user?(@twitter.uid.to_i)
       tweets = twitter_client.home_timeline
       @tweets_text = tweets.map { |tweet| tweet.text }
     end
@@ -11,8 +11,6 @@ class UsersController < ApplicationController
 
   def publish
     content = params[:content]
-    # post = Post.new(params[:provider], content)
-    # post.publish
     twitter_client.update(content)
     redirect_to user_path(@user)
   end

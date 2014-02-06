@@ -5,7 +5,8 @@ Okayfeed::Application.routes.draw do
       post 'publish'
     end
   end
-  get '/auth/:provider/callback', :to => 'authorizations#create'
+  get '/auth/:provider/callback', to: 'authorizations#create'
+  delete '/auth/:provider',       to: 'authorizations#destroy', as: 'delete_auth'
   get 'static_pages/home'
   root 'static_pages#home'
 

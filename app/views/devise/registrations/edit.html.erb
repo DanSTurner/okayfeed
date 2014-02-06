@@ -33,7 +33,8 @@
 <% if @twitter.nil?  %>
   <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default" %>
 <% else %>
-  Twitter: <%= @twitter.uid %>
+  Twitter: <%= @twitter.name %><br>
+  <%= button_to "Deauthorize Twitter", delete_auth_path('twitter'), data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger" %>
 <% end %>
 
 <h3>Cancel my account</h3>

@@ -11,7 +11,7 @@
     <ul class="nav navbar-nav navbar-right">
       <% if user_signed_in? %>
         <li>
-          <%= link_to('Profile', user_path(current_user)) %>
+          <%= link_to('Feed', user_path(current_user)) %>
         </li>
         <li>
           <%= link_to('Sign out', destroy_user_session_path, :method => :delete) %>
