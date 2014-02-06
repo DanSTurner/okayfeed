@@ -30,7 +30,7 @@
   <div><%= f.submit "Update" %></div>
 <% end %>
 
-<% if @twitter.nil? %>
+<% if @twitter.nil?  %>
   <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default" %>
 <% else %>
   Twitter: <%= @twitter.uid %>

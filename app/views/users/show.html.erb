@@ -1,19 +1,29 @@
 <h1><%= @user.email %></h1>
-<% if @twitter.uid.nil? or @twitter.uid == "" %>
-  <p>You have not yet linked a Twitter account</p>
+<% if @user.authorizations.empty? && @user == current_user %>
+  <p>You have not yet linked any accounts. Click "Edit user" to do so now.</p>
 <% else %>
+  <%= form_for @user, url: publish_user_path(current_user), method: :post, class: "form" do |f| %>
+    <div class="form-group">
+      <%= text_area_tag :content, nil, class: "form-control" %>
+    </div>
+    <%= f.submit "Publish", class: "btn btn-default" %>
+  <% end %>
   <% @tweets_text.each do |tweet| %>
     <p><%= tweet %></p>
   <% end %>
 <% end %>
 
-<%= "asdf" if current_user == @user %>
+<% if current_user == @user %>
+  <%= link_to "Edit user", edit_user_registration_path(@user) %>
 
-<%= link_to "Edit user", edit_user_registration_path(@user) %>
-
-<h3>Authorized accounts</h3>
-<ul>
-  <% unless @twitter.nil? %>
-    <li>Twitter: <%= @twitter.uid %></li>
+  <% if @user.authorizations.any? %>
+    <h3>Authorized accounts</h3>
+      <ul>
+      <% @user.authorizations.each do |acct| %>
+        <% unless @twitter.nil? %>
+          <li><%= acct.provider.capitalize + ": " + acct.name %></li>
+        <% end %>
+      </ul>
+    <% end %>
   <% end %>
-</ul>
+<% end %>

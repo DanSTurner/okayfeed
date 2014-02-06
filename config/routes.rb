@@ -1,6 +1,10 @@
 Okayfeed::Application.routes.draw do
   devise_for :users, controllers: { registrations: 'registrations' }
-  resources :users, only: [:show]
+  resources :users, only: [:show, :publish] do
+    member do
+      post 'publish'
+    end
+  end
   get '/auth/:provider/callback', :to => 'authorizations#create'
   get 'static_pages/home'
   root 'static_pages#home'

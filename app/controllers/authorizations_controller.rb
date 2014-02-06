@@ -7,10 +7,15 @@ class AuthorizationsController < ApplicationController
     authorization.update_attributes(provider: auth["provider"],
                                     uid:      auth["uid"],
                                     token:    auth["credentials"]["token"],
-                                    secret:   auth["credentials"]["secret"]
+                                    secret:   auth["credentials"]["secret"],
                                     name:     auth["info"]["name"])
     authorization.save
     redirect_to edit_user_registration_path(@user)
+  end
+
+  def destroy
+    @user.authorization.destroy
+    redirect_to
   end
 
   private
