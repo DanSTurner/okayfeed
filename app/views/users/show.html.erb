@@ -8,20 +8,37 @@
     </div>
     <%= f.submit "Publish", class: "btn btn-default" %>
   <% end %>
-  <% if @tweets.any? %>
-    <% @tweets.each do |tweet| %>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <%= link_to "http://www.twitter.com/#{tweet.user.screen_name}" do %>
-              <%= image_tag tweet.user.profile_image_url, style: "float: left; padding-right: 10px;" %>
-              <strong><%= tweet.user.screen_name %></strong><br>
-              <%= "@" + tweet.user.name %>
+
+  <% unless @feed_items.empty? %>
+    <% @feed_items.each do |item| %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <%= link_to item[:user_url] do %>
+            <%= image_tag item[:user_image_url], style: "float: left; padding-right: 10px;" %>
+            <strong><%= item[:user_screen_name] %></strong><br>
+            <% if item[:user_name].nil? %>
+              <i class="fa fa-<%= item[:provider] %> pull-right"></i>
+              <br>
+            <% else %>
+              <%= "@" + item[:user_name] %> <i class="fa fa-<%= item[:provider] %> pull-right"></i>
             <% end %>
-          </div>
-          <div class="panel-body">
-            <%= tweet.text %>
-          </div>
+          <% end %>
         </div>
+        <div class="panel-body">
+          <%= item[:text] %><br>
+          <% unless item[:picture_url].nil? %>
+            <%= image_tag item[:picture_url] %><br>
+          <% end %>
+          <br>
+          <%= link_to item[:url] do %>
+            <% if item[:created_at] > Time.now.beginning_of_day %>
+                <%= "#{time_ago_in_words(item[:created_at])} ago" %>
+            <% else %>
+                <%= item[:created_at].strftime("%b %d") %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   <% end %>
 <% end %>
@@ -32,11 +49,13 @@
   <% if @user.authorizations.any? %>
     <h3>Authorized accounts</h3>
       <ul>
-      <% @user.authorizations.each do |acct| %>
-        <% unless @twitter.nil? %>
+        <% @user.authorizations.each do |acct| %>
           <li><%= acct.provider.capitalize + ": " + acct.name %></li>
         <% end %>
       </ul>
-    <% end %>
   <% end %>
+<% end %>
+
+<% @facebook_feed.each do |post| %>
+<%= post.inspect %><br><br>
 <% end %>

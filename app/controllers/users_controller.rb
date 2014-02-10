@@ -3,11 +3,39 @@ class UsersController < ApplicationController
   before_action :set_authorizations,   only: [:show, :publish]
 
   def show
-    if @user.authorizations.find_by(provider: 'twitter') && twitter_client.user?(@twitter.uid.to_i)
+    @feed_items ||= []
+    if @user.authorizations.find_by(provider: 'twitter')
       @tweets = twitter_client.home_timeline
-      # @tweets_text   = tweets.map { |tweet| tweet.text }
-      # @tweets_author = tweets.map { |tweet| tweet.user.name }
+      @tweets.each do |tweet|
+        @feed_items << {
+          user_screen_name:   tweet.user.screen_name,
+          user_name:          tweet.user.name,
+          user_image_url:     tweet.user.profile_image_url,
+          user_url:           "https://www.twitter.com/#{tweet.user.screen_name}",
+          user_image_url:     tweet.user.profile_image_url,
+          text:               tweet.text,
+          url:                "https://www.twitter.com/#{tweet.user.screen_name}/statuses/#{tweet.id}",
+          created_at:         tweet.created_at,
+          provider:           "twitter"
+          }
+      end
     end
+    if @user.authorizations.find_by(provider: 'facebook')
+      @facebook_feed = facebook_client.get_connections('me', 'home')
+      @facebook_feed.each do |post|
+        @feed_items << {
+          user_screen_name:   post['from']['name'],
+          user_url:           "https://www.facebook.com/#{post['from']['id']}/",
+          user_image_url:     "http://graph.facebook.com/#{post['from']['id']}/picture",
+          text:               post['message'],
+          picture_url:        post['picture'],
+          url:                "https://www.facebook.com/#{post['id']}/",
+          created_at:         DateTime.parse(post['created_time']),
+          provider:           "facebook"
+        }
+      end
+    end
+    @feed_items = @feed_items.sort_by { |k| k[:created_at] }.reverse
   end
 
   def publish
@@ -25,7 +53,8 @@ class UsersController < ApplicationController
     end
 
     def set_authorizations
-      @twitter = @user.authorizations.find_by(provider: 'twitter')
+      @twitter  = @user.authorizations.find_by(provider: 'twitter')
+      @facebook = @user.authorizations.find_by(provider: 'facebook')
     end
 
     def twitter_client
@@ -35,5 +64,9 @@ class UsersController < ApplicationController
         config.access_token         = @twitter.token
         config.access_token_secret  = @twitter.secret
       end
+    end
+
+    def facebook_client
+      @graph ||= Koala::Facebook::API.new(@facebook.token)
     end
 end

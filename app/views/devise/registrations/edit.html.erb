@@ -37,6 +37,13 @@
   <%= button_to "Deauthorize Twitter", delete_auth_path('twitter'), data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger" %>
 <% end %>
 
+<% if @facebook.nil?  %>
+  <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default" %>
+<% else %>
+  Facebook: <%= @facebook.name %><br>
+  <%= button_to "Deauthorize Facebook", delete_auth_path('facebook'), data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger" %>
+<% end %>
+
 <h3>Cancel my account</h3>
 
 <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), :data => { :confirm => "Are you sure?" }, :method => :delete %></p>
