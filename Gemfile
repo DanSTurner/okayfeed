@@ -15,6 +15,8 @@ gem 'omniauth', '~> 1.2.1'
 gem 'omniauth-twitter', '~> 1.0.1'
 gem 'koala', '~> 1.8.0'
 gem 'omniauth-facebook', '~> 1.6.0'
+gem 'flickraw', '~> 0.9.7'
+gem 'omniauth-flickr', '~> 0.0.13'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'

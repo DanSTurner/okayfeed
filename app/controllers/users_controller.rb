@@ -4,37 +4,8 @@ class UsersController < ApplicationController
 
   def show
     @feed_items ||= []
-    if @user.authorizations.find_by(provider: 'twitter')
-      @tweets = twitter_client.home_timeline
-      @tweets.each do |tweet|
-        @feed_items << {
-          user_screen_name:   tweet.user.screen_name,
-          user_name:          tweet.user.name,
-          user_image_url:     tweet.user.profile_image_url,
-          user_url:           "https://www.twitter.com/#{tweet.user.screen_name}",
-          user_image_url:     tweet.user.profile_image_url,
-          text:               tweet.text,
-          url:                "https://www.twitter.com/#{tweet.user.screen_name}/statuses/#{tweet.id}",
-          created_at:         tweet.created_at,
-          provider:           "twitter"
-          }
-      end
-    end
-    if @user.authorizations.find_by(provider: 'facebook')
-      @facebook_feed = facebook_client.get_connections('me', 'home')
-      @facebook_feed.each do |post|
-        @feed_items << {
-          user_screen_name:   post['from']['name'],
-          user_url:           "https://www.facebook.com/#{post['from']['id']}/",
-          user_image_url:     "http://graph.facebook.com/#{post['from']['id']}/picture",
-          text:               post['message'],
-          picture_url:        post['picture'],
-          url:                "https://www.facebook.com/#{post['id']}/",
-          created_at:         DateTime.parse(post['created_time']),
-          provider:           "facebook"
-        }
-      end
-    end
+    create_feed('twitter')  if @twitter
+    create_feed('facebook') if @facebook
     @feed_items = @feed_items.sort_by { |k| k[:created_at] }.reverse
   end
 
@@ -73,5 +44,39 @@ class UsersController < ApplicationController
 
     def facebook_client
       @graph ||= Koala::Facebook::API.new(@facebook.token)
+    end
+
+    def create_feed(provider)
+      if provider == 'twitter'
+        tweets = twitter_client.home_timeline
+        tweets.each do |tweet|
+          @feed_items << {
+            user_screen_name:   tweet.user.name,
+            user_name:          tweet.user.screen_name,
+            user_image_url:     tweet.user.profile_image_url,
+            user_url:           "https://www.twitter.com/#{tweet.user.screen_name}",
+            user_image_url:     tweet.user.profile_image_url,
+            text:               tweet.text,
+            url:                "https://www.twitter.com/#{tweet.user.screen_name}/statuses/#{tweet.id}",
+            created_at:         tweet.created_at,
+            provider:           "twitter"
+            }
+        end
+      end
+      if provider == 'facebook'
+        @facebook_feed = facebook_client.get_connections('me', 'home')
+        @facebook_feed.each do |post|
+          @feed_items << {
+            user_screen_name:   post['from']['name'],
+            user_url:           "https://www.facebook.com/#{post['from']['id']}/",
+            user_image_url:     "http://graph.facebook.com/#{post['from']['id']}/picture",
+            text:               post['message'],
+            picture_url:        post['picture'],
+            url:                "https://www.facebook.com/#{post['id']}/",
+            created_at:         DateTime.parse(post['created_time']),
+            provider:           "facebook"
+          }
+        end
+      end
     end
 end
