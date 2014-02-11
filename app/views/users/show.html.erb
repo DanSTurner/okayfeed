@@ -6,6 +6,18 @@
     <div class="form-group">
       <%= text_area_tag :content, nil, class: "form-control" %>
     </div>
+    <% if @twitter %>
+      <div class="checkbox">
+          <%= check_box_tag 'provider[]', 'twitter' %>
+          <%= label_tag 'twitter' %>
+      </div>
+    <% end %>
+    <% if @facebook %>
+      <div class="checkbox">
+          <%= check_box_tag 'provider[]', 'facebook' %>
+          <%= label_tag 'facebook' %>
+      </div>
+    <% end %>
     <%= f.submit "Publish", class: "btn btn-default" %>
   <% end %>
 
@@ -56,6 +68,3 @@
   <% end %>
 <% end %>
 
-<% @facebook_feed.each do |post| %>
-<%= post.inspect %><br><br>
-<% end %>

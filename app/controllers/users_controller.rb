@@ -42,7 +42,12 @@ class UsersController < ApplicationController
     content = params[:content]
     # post = Post.new(params[:provider], content)
     # post.publish
-    twitter_client.update(content)
+    if params[:provider].include?("twitter")
+      twitter_client.update(content)
+    end
+    if params[:provider].include?("facebook")
+      facebook_client.put_wall_post(content)
+    end
     redirect_to user_path(@user)
   end
 
