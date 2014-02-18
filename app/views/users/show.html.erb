@@ -2,7 +2,7 @@
 <% if @user.authorizations.empty? && @user == current_user %>
   <p>You have not yet linked any accounts. Click "Edit user" to do so now.</p>
 <% else %>
-  <%= form_for @user, url: publish_user_path(current_user), method: :post, class: "form" do |f| %>
+  <%= form_for @user, url: publish_user_path(current_user), method: :post, :html => { :multipart => true }, class: "form" do |f| %>
     <div class="form-group">
       <%= text_area_tag :content, nil, class: "form-control" %>
     </div>
@@ -17,6 +17,10 @@
           <%= check_box_tag 'provider[]', 'facebook' %>
           <%= label_tag 'facebook' %>
       </div>
+      <div class="btn btn-default btn-file">
+        <%= label_tag 'image', 'Choose file' %>
+        <%= file_field_tag 'image' %>
+      </div><br>
     <% end %>
     <%= f.submit "Publish", class: "btn btn-default" %>
   <% end %>
@@ -67,4 +71,5 @@
       </ul>
   <% end %>
 <% end %>
+
 

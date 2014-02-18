@@ -7,6 +7,8 @@ class UsersController < ApplicationController
     create_feed('twitter')  if @twitter
     create_feed('facebook') if @facebook
     @feed_items = @feed_items.sort_by { |k| k[:created_at] }.reverse
+    # @flickr_test = flickr_client.urls if @flickr
+    # <%= @flickr_test.inspect %> hm flickr doesn't really provide a stream
   end
 
   def publish
@@ -17,7 +19,13 @@ class UsersController < ApplicationController
       twitter_client.update(content)
     end
     if params[:provider].include?("facebook")
-      facebook_client.put_wall_post(content)
+      if params[:image]
+        save_image(params[:image])
+        facebook_client.put_picture(@path, content)
+        File.delete(@path)
+      else
+        facebook_client.put_wall_post(content)
+      end
     end
     redirect_to user_path(@user)
   end
@@ -31,10 +39,11 @@ class UsersController < ApplicationController
     def set_authorizations
       @twitter  = @user.authorizations.find_by(provider: 'twitter')
       @facebook = @user.authorizations.find_by(provider: 'facebook')
+      @flickr   = @user.authorizations.find_by(provider: 'flickr')
     end
 
     def twitter_client
-      @client ||= Twitter::REST::Client.new do |config|
+      @twitter_client ||= Twitter::REST::Client.new do |config|
         config.consumer_key         = ENV["CONSUMER_KEY"]
         config.consumer_secret      = ENV["CONSUMER_SECRET"]
         config.access_token         = @twitter.token
@@ -43,7 +52,16 @@ class UsersController < ApplicationController
     end
 
     def facebook_client
-      @graph ||= Koala::Facebook::API.new(@facebook.token)
+      @facebook_client ||= Koala::Facebook::API.new(@facebook.token)
+    end
+
+    def flickr_client
+      FlickRaw.api_key          = ENV["FLICKR_APP_KEY"]
+      FlickRaw.shared_secret    = ENV["FLICKR_APP_SECRET"]
+      @flickr_client                ||= FlickRaw::Flickr.new
+      @flickr_client.access_token   ||= @flickr.token
+      @flickr_client.access_secret  ||= @flickr.secret
+      return @flickr_client
     end
 
     def create_feed(provider)
@@ -78,5 +96,13 @@ class UsersController < ApplicationController
           }
         end
       end
+    end
+
+    def save_image(image_params)
+      name = image_params.original_filename
+      directory = "tmp/uploads"
+      @path = File.join(directory, name)
+      file = image_params.tempfile.read
+      File.open(@path, "wb") { |f| f.write(file) }
     end
 end

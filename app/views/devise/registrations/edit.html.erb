@@ -31,23 +31,23 @@
 <% end %>
 
 <% if @twitter.nil?  %>
-  <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default" %>
+  <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default" %><br>
 <% else %>
   Twitter: <%= @twitter.name %><br>
   <%= button_to "Deauthorize Twitter", delete_auth_path('twitter'), data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger" %>
 <% end %>
 
 <% if @facebook.nil?  %>
-  <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default" %>
+  <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default" %><br>
 <% else %>
   Facebook: <%= @facebook.name %><br>
   <%= button_to "Deauthorize Facebook", delete_auth_path('facebook'), data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger" %>
 <% end %>
 
 <% if @flickr.nil?  %>
-  <%= link_to "Authorize with Flickr", "/auth/flickr", class: "btn btn-default" %>
+  <%= link_to "Authorize with Flickr", "/auth/flickr", class: "btn btn-default" %><br>
 <% else %>
-  Facebook: <%= @flickr.name %><br>
+  Flickr: <%= @flickr.name %><br>
   <%= button_to "Deauthorize Flickr", delete_auth_path('flickr'), data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger" %>
 <% end %>
 
