@@ -1,6 +1,20 @@
 <h1><%= @user.email %></h1>
 <% if @user.authorizations.empty? && @user == current_user %>
-  <p>You have not yet linked any accounts. Click "Edit user" to do so now.</p>
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">No linked accounts</h4>
+          </div>
+          <div class="modal-body">
+            You have not yet linked any accounts. Please link one now to use OkayFeed.<br>
+            <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default" %><br>
+            <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default" %>
+          </div>
+        </div>
+      </div>
+  </div>
 <% else %>
   <%= form_for @user, url: publish_user_path(current_user), method: :post, :html => { :multipart => true }, class: "form" do |f| %>
     <div class="form-group">
