@@ -1,5 +1,6 @@
 <h1><%= @user.email %></h1>
 <% if @user.authorizations.empty? && @user == current_user %>
+  No linked accounts
   <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -8,9 +9,13 @@
             <h4 class="modal-title">No linked accounts</h4>
           </div>
           <div class="modal-body">
-            You have not yet linked any accounts. Please link one now to use OkayFeed.<br>
-            <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default" %><br>
-            <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default" %>
+            Link an account to start using OkayFeed.<br><br>
+              <div class="text-center">
+                <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default btn-lg" %>
+                <br><br>
+                <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default btn-lg" %>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -32,11 +37,11 @@
           <%= label_tag 'facebook' %>
       </div>
       <div class="btn btn-default btn-file">
-        <%= label_tag 'image', 'Choose file' %>
+        <%= label_tag 'image', 'Include image' %>
         <%= file_field_tag 'image' %>
-      </div><br>
+      </div><br><br>
     <% end %>
-    <%= f.submit "Publish", class: "btn btn-default" %>
+    <%= f.submit "Publish", class: "btn btn-default" %><br><br>
   <% end %>
 
   <% unless @feed_items.empty? %>
@@ -74,8 +79,6 @@
 <% end %>
 
 <% if current_user == @user %>
-  <%= link_to "Edit user", edit_user_registration_path(@user) %>
-
   <% if @user.authorizations.any? %>
     <h3>Authorized accounts</h3>
       <ul>

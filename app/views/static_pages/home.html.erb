@@ -1,8 +1,12 @@
-<% provide(:title, "An acceptable place to aggregate SoMe") %>
+<% provide(:title, "An acceptable place to aggregate Social Media") %>
 
 <div class="jumbotron">
-  <h1>OkayFeed</h1>
-  <p>An acceptable place to aggregate SoMe</p>
+  <h1><i class="fa fa-check-square-o"></i> OkayFeed</h1>
+  <p>An acceptable place to aggregate Social Media</p>
 
-  <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+  <% if user_signed_in? %>
+    <%= link_to "View your Feed", user_path(current_user), class: "btn btn-primary btn-lg" %>
+  <% else %>
+    <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+  <% end %>
 </div>
