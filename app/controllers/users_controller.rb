@@ -20,9 +20,7 @@ class UsersController < ApplicationController
     end
     if params[:provider].include?("facebook")
       if params[:image]
-        save_image(params[:image])
-        facebook_client.put_picture(@path, content)
-        File.delete(@path)
+        facebook_client.put_picture(params[:image], content)
       else
         facebook_client.put_wall_post(content)
       end
@@ -96,13 +94,5 @@ class UsersController < ApplicationController
           }
         end
       end
-    end
-
-    def save_image(image_params)
-      name = image_params.original_filename
-      directory = "tmp/uploads"
-      @path = File.join(directory, name)
-      file = image_params.tempfile.read
-      File.open(@path, "wb") { |f| f.write(file) }
     end
 end
