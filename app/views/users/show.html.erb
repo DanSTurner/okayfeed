@@ -20,6 +20,9 @@
         </div>
       </div>
   </div>
+  <script>
+   $('#myModal').modal()
+   </script>
 <% else %>
   <%= form_for @user, url: publish_user_path(current_user), method: :post, :html => { :multipart => true }, class: "form" do |f| %>
     <div class="form-group">
@@ -88,5 +91,3 @@
       </ul>
   <% end %>
 <% end %>
-
-
