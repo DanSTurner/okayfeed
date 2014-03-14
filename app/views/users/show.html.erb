@@ -51,7 +51,7 @@
     <% @feed_items.each do |item| %>
       <div class="panel panel-default">
         <div class="panel-heading">
-          <%= link_to item[:user_url] do %>
+          <%= link_to item[:user_url], target: '_blank' do %>
             <%= image_tag item[:user_image_url], style: "float: left; padding-right: 10px;" %>
             <strong><%= item[:user_screen_name] %></strong><br>
             <% if item[:user_name].nil? %>
