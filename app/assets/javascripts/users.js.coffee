@@ -2,3 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 //= require bootstrap/modal
+$(document).ready ->
+  $('#myModal').modal 'show'
+  return
