@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     end
     if params[:provider].include?("facebook")
       if params[:image]
-        facebook_client.put_picture(params[:image], content)
+        facebook_client.put_picture(params[:image], {message: content})
       else
         facebook_client.put_wall_post(content)
       end
