@@ -19,7 +19,6 @@
       </div>
     </div>
   </div>
-
 <% else %>
   <%= form_for @user, url: publish_user_path(current_user), method: :post, :html => { :multipart => true }, class: "form" do |f| %>
     <div class="form-group">
@@ -36,11 +35,12 @@
           <%= check_box_tag 'provider[]', 'facebook' %>
           <%= label_tag 'facebook' %>
       </div>
-      <div class="btn btn-default btn-file">
-        <%= label_tag 'image', 'Include image' %>
-        <%= file_field_tag 'image' %>
-      </div><br><br>
     <% end %>
+    <div class="btn btn-default btn-file">
+      <%= label_tag 'image', 'Include image' %>
+      <%= file_field_tag 'image' %>
+    </div>
+    <br><br>
     <%= f.submit "Publish", class: "btn btn-default" %><br><br>
   <% end %>
 
