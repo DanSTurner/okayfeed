@@ -90,6 +90,10 @@ class UsersController < ApplicationController
             user_image_url:     "http://graph.facebook.com/#{post['from']['id']}/picture",
             text:               post['message'],
             picture_url:        post['picture'],
+            link:               post['link'],
+            name:               post['name'],
+            link_caption:       post['caption'],
+            story:              post['story'],
             url:                "https://www.facebook.com/#{post['id']}/",
             created_at:         DateTime.parse(post['created_time']),
             provider:           "facebook"

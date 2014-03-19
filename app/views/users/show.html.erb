@@ -49,7 +49,7 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <%= link_to item[:user_url], target: '_blank' do %>
-            <%= image_tag item[:user_image_url], style: "float: left; padding-right: 10px;" %>
+            <%= image_tag item[:user_image_url], style: "float: left; padding-right: 10px; max-width:50px; max-height:50px;" %>
             <strong><%= item[:user_screen_name] %></strong><br>
             <% if item[:user_name].nil? %>
               <i class="fa fa-<%= item[:provider] %> pull-right"></i>
@@ -60,11 +60,20 @@
           <% end %>
         </div>
         <div class="panel-body">
-          <%= item[:text] %><br>
+          <%= item[:text] %><br><br>
           <% unless item[:picture_url].nil? %>
-            <%= image_tag item[:picture_url] %><br>
+            <%= image_tag item[:picture_url] %><br><br>
           <% end %>
-          <br>
+          <% unless item[:link].nil? %>
+            <div>
+
+              <%= link_to item[:name], item[:link] %><br>
+              <%= item[:link_caption] %>
+            </div><br>
+          <% end %>
+          <% unless item[:story].nil? %>
+            <%= item[:story] %><br><br>
+          <% end %>
           <%= link_to item[:url] do %>
             <% if item[:created_at] > Time.now.beginning_of_day %>
                 <%= "#{time_ago_in_words(item[:created_at])} ago" %>
