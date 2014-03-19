@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     def set_authorizations
       @twitter  = @user.authorizations.find_by(provider: 'twitter')
       @facebook = @user.authorizations.find_by(provider: 'facebook')
-      @flickr   = @user.authorizations.find_by(provider: 'flickr')
+      # @flickr   = @user.authorizations.find_by(provider: 'flickr')
     end
 
     def twitter_client
@@ -55,14 +55,14 @@ class UsersController < ApplicationController
       @facebook_client ||= Koala::Facebook::API.new(@facebook.token)
     end
 
-    def flickr_client
-      FlickRaw.api_key          = ENV["FLICKR_APP_KEY"]
-      FlickRaw.shared_secret    = ENV["FLICKR_APP_SECRET"]
-      @flickr_client                ||= FlickRaw::Flickr.new
-      @flickr_client.access_token   ||= @flickr.token
-      @flickr_client.access_secret  ||= @flickr.secret
-      return @flickr_client
-    end
+    # def flickr_client
+    #   FlickRaw.api_key          = ENV["FLICKR_APP_KEY"]
+    #   FlickRaw.shared_secret    = ENV["FLICKR_APP_SECRET"]
+    #   @flickr_client                ||= FlickRaw::Flickr.new
+    #   @flickr_client.access_token   ||= @flickr.token
+    #   @flickr_client.access_secret  ||= @flickr.secret
+    #   return @flickr_client
+    # end
 
     def create_feed(provider)
       if provider == 'twitter'
@@ -96,5 +96,7 @@ class UsersController < ApplicationController
           }
         end
       end
+
+
     end
 end

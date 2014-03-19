@@ -3,11 +3,11 @@ class AuthorizationsController < ApplicationController
 
   def create
     auth = request.env["omniauth.auth"]
-    @user.authorizations.create(provider: auth["provider"],
-                                uid:      auth["uid"],
-                                token:    auth["credentials"]["token"],
-                                secret:   auth["credentials"]["secret"],
-                                name:     auth["info"]["name"])
+    @user.authorizations.create(provider:           auth["provider"],
+                                uid:                auth["uid"],
+                                token:              auth["credentials"]["token"],
+                                secret:             auth["credentials"]["secret"],
+                                name:               auth["info"]["name"])
     redirect_to user_path(@user)
   end
 

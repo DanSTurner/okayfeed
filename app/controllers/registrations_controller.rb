@@ -8,9 +8,9 @@ class RegistrationsController < Devise::RegistrationsController
 
   protected
     def set_authorizations
-      @twitter = @user.authorizations.find_by(provider: 'twitter')
+      @twitter  = @user.authorizations.find_by(provider: 'twitter')
       @facebook = @user.authorizations.find_by(provider: 'facebook')
-      @flickr   = @user.authorizations.find_by(provider: 'flickr')
+      # @flickr   = @user.authorizations.find_by(provider: 'flickr')
     end
 
 end

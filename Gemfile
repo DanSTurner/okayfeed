@@ -16,6 +16,7 @@ gem 'koala', '~> 1.8.0'
 gem 'omniauth-facebook', '~> 1.6.0'
 gem 'flickraw', '~> 0.9.7'
 gem 'omniauth-flickr', '~> 0.0.13'
+gem 'newrelic_rpm'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'
