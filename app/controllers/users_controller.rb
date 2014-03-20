@@ -65,7 +65,8 @@ class UsersController < ApplicationController
     end
 
     def refresh_cache
-      return nil if (Time.now - @user.feed_updated_at) / 60 < 6
+      @user.feed_updated_at ? t = @user.feed_updated_at : t = Time.now - 7.minutes
+      return nil if (Time.now - t) / 60 < 6
       @user.posts.all.each { |item| item.destroy }
       if @twitter
         tweets = twitter_client.home_timeline
