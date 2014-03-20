@@ -44,41 +44,41 @@
     <%= f.submit "Publish", class: "btn btn-default" %><br><br>
   <% end %>
 
-  <% unless @feed_items.empty? %>
-    <% @feed_items.each do |item| %>
+  <% unless @posts.empty? %>
+    <% @posts.each do |post| %>
       <div class="panel panel-default">
         <div class="panel-heading">
-          <%= link_to item[:user_url], target: '_blank' do %>
-            <%= image_tag item[:user_image_url], style: "float: left; padding-right: 10px; max-width:50px; max-height:50px;" %>
-            <strong><%= item[:user_screen_name] %></strong><br>
-            <% if item[:user_name].nil? %>
-              <i class="fa fa-<%= item[:provider] %> pull-right"></i>
+          <%= link_to post[:user_url], target: '_blank' do %>
+            <%= image_tag post[:user_image_url], style: "float: left; padding-right: 10px; max-width:50px; max-height:50px;" %>
+            <strong><%= post[:user_screen_name] %></strong><br>
+            <% if post[:user_name].nil? %>
+              <i class="fa fa-<%= post[:provider] %> pull-right"></i>
               <br>
             <% else %>
-              <%= "@" + item[:user_name] %> <i class="fa fa-<%= item[:provider] %> pull-right"></i>
+              <%= "@" + post[:user_name] %> <i class="fa fa-<%= post[:provider] %> pull-right"></i>
             <% end %>
           <% end %>
         </div>
         <div class="panel-body">
-          <%= item[:text] %><br><br>
-          <% unless item[:picture_url].nil? %>
-            <%= image_tag item[:picture_url] %><br><br>
+          <%= post[:text] %><br><br>
+          <% unless post[:picture_url].nil? %>
+            <%= image_tag post[:picture_url] %><br><br>
           <% end %>
-          <% unless item[:link].nil? %>
+          <% unless post[:link].nil? %>
             <div>
 
-              <%= link_to item[:name], item[:link] %><br>
-              <%= item[:link_caption] %>
+              <%= link_to post[:name], post[:link] %><br>
+              <%= post[:link_caption] %>
             </div><br>
           <% end %>
-          <% unless item[:story].nil? %>
-            <%= item[:story] %><br><br>
+          <% unless post[:story].nil? %>
+            <%= post[:story] %><br><br>
           <% end %>
-          <%= link_to item[:url] do %>
-            <% if item[:created_at] > Time.now.beginning_of_day %>
-                <%= "#{time_ago_in_words(item[:created_at])} ago" %>
+          <%= link_to post[:url] do %>
+            <% if post[:created_at] > Time.now.beginning_of_day %>
+                <%= "#{time_ago_in_words(post[:created_at])} ago" %>
             <% else %>
-                <%= item[:created_at].strftime("%b %d") %>
+                <%= post[:created_at].strftime("%b %d") %>
             <% end %>
           <% end %>
         </div>

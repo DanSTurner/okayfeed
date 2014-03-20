@@ -8,6 +8,7 @@ class AuthorizationsController < ApplicationController
                                 token:              auth["credentials"]["token"],
                                 secret:             auth["credentials"]["secret"],
                                 name:               auth["info"]["name"])
+    @user.update_attribute(:feed_updated_at, Time.now - 7.minutes)
     redirect_to user_path(@user)
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140204190954) do
+ActiveRecord::Schema.define(version: 20140320201037) do
 
   create_table "authorizations", force: true do |t|
     t.string   "provider"
@@ -25,6 +25,26 @@ ActiveRecord::Schema.define(version: 20140204190954) do
   end
 
   add_index "authorizations", ["user_id"], name: "index_authorizations_on_user_id"
+
+  create_table "posts", force: true do |t|
+    t.integer  "user_id"
+    t.string   "provider"
+    t.string   "user_screen_name"
+    t.string   "user_name"
+    t.string   "user_url"
+    t.string   "user_image_url"
+    t.text     "text"
+    t.string   "url"
+    t.datetime "created_at"
+    t.string   "picture_url"
+    t.string   "link"
+    t.string   "name"
+    t.text     "link_caption"
+    t.text     "story"
+    t.datetime "updated_at"
+  end
+
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -40,6 +60,7 @@ ActiveRecord::Schema.define(version: 20140204190954) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "twitter_username"
+    t.datetime "feed_updated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

@@ -1,14 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user,             only: [:show, :publish]
   before_action :set_authorizations,   only: [:show, :publish]
+  before_action :feed_items_cache,     only: [:show]
 
   def show
-    @feed_items ||= []
-    create_feed('twitter')  if @twitter
-    create_feed('facebook') if @facebook
-    @feed_items = @feed_items.sort_by { |k| k[:created_at] }.reverse
-    # @flickr_test = flickr_client.urls if @flickr
-    # <%= @flickr_test.inspect %> hm flickr doesn't really provide a stream
   end
 
   def publish
@@ -64,27 +59,34 @@ class UsersController < ApplicationController
     #   return @flickr_client
     # end
 
-    def create_feed(provider)
-      if provider == 'twitter'
+    def feed_items_cache
+      refresh_cache
+      @posts = @user.posts.all
+    end
+
+    def refresh_cache
+      return nil if (Time.now - @user.feed_updated_at) / 60 < 6
+      @user.posts.all.each { |item| item.destroy }
+      if @twitter
         tweets = twitter_client.home_timeline
         tweets.each do |tweet|
-          @feed_items << {
+          @post = @user.posts.build(
             user_screen_name:   tweet.user.name,
             user_name:          tweet.user.screen_name,
-            user_image_url:     tweet.user.profile_image_url,
+            user_image_url:     tweet.user.profile_image_url.to_s,
             user_url:           "https://www.twitter.com/#{tweet.user.screen_name}",
-            user_image_url:     tweet.user.profile_image_url,
             text:               tweet.text,
             url:                "https://www.twitter.com/#{tweet.user.screen_name}/statuses/#{tweet.id}",
             created_at:         tweet.created_at,
             provider:           "twitter"
-            }
+            )
+          @post.save
         end
       end
-      if provider == 'facebook'
-        @facebook_feed = facebook_client.get_connections('me', 'home')
-        @facebook_feed.each do |post|
-          @feed_items << {
+      if @facebook
+        facebook_feed = facebook_client.get_connections('me', 'home')
+        facebook_feed.each do |post|
+          @post = @user.posts.build(
             user_screen_name:   post['from']['name'],
             user_url:           "https://www.facebook.com/#{post['from']['id']}/",
             user_image_url:     "http://graph.facebook.com/#{post['from']['id']}/picture",
@@ -97,10 +99,10 @@ class UsersController < ApplicationController
             url:                "https://www.facebook.com/#{post['id']}/",
             created_at:         DateTime.parse(post['created_time']),
             provider:           "facebook"
-          }
+            )
+          @post.save
         end
       end
-
-
+      @user.update_attribute(:feed_updated_at, Time.now)
     end
 end
