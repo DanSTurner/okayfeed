@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     content = params[:content]
     if params[:provider].include?("twitter")
       if params[:image]
-        twitter_client.update_with_media(content, params[:image])
+        twitter_client.update_with_media(content, params[:image].tempfile)
       else
         twitter_client.update(content)
       end
