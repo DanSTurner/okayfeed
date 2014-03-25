@@ -16,6 +16,9 @@ gem 'koala', '~> 1.8.0'
 gem 'omniauth-facebook', '~> 1.6.0'
 gem 'flickraw', '~> 0.9.7'
 gem 'omniauth-flickr', '~> 0.0.13'
+gem 'resque', '~> 1.25.2'
+gem 'resque-web', '~> 0.0.5'
+gem 'foreman', '~> 0.63.0', require: 'resque_web'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'
