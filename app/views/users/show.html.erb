@@ -85,6 +85,17 @@
       </div>
     <% end %>
   <% end %>
+  <script type="text/javascript">
+    $(document).ready(function () {
+          setInterval(function() {
+              $.ajax({
+                url: "/users/<%= @user.id%>/background_refresh",
+                type: "POST"
+              })
+            }, 20000);
+
+        });
+  </script>
 <% end %>
 
 <% if current_user == @user %>

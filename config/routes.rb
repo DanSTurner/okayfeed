@@ -7,6 +7,7 @@ Okayfeed::Application.routes.draw do
   resources :users, only: [:show, :publish] do
     member do
       post 'publish'
+      post 'background_refresh'
     end
   end
   get '/auth/:provider/callback', to: 'authorizations#create'

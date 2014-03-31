@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user,             only: [:show, :publish]
+  before_action :set_user,             only: [:show, :publish, :background_refresh]
   before_action :set_authorizations,   only: [:show, :publish]
   before_action :feed_items_cache,     only: [:show]
 
@@ -23,6 +23,11 @@ class UsersController < ApplicationController
       end
     end
     redirect_to user_path(@user)
+  end
+
+  def background_refresh
+    Resque.enqueue(BackgroundRefresh, @user.id.to_s)
+    render :nothing => true
   end
 
   private
@@ -60,50 +65,7 @@ class UsersController < ApplicationController
     # end
 
     def feed_items_cache
-      refresh_cache
-      @posts = @user.posts.all
-    end
-
-    def refresh_cache
-      @user.feed_updated_at ? t = @user.feed_updated_at : t = Time.now - 7.minutes
-      return nil if (Time.now - t) / 60 < 6
-      @user.posts.all.each { |item| item.destroy }
-      if @twitter
-        tweets = twitter_client.home_timeline
-        tweets.each do |tweet|
-          @post = @user.posts.build(
-            user_screen_name:   tweet.user.name,
-            user_name:          tweet.user.screen_name,
-            user_image_url:     tweet.user.profile_image_url.to_s,
-            user_url:           "https://www.twitter.com/#{tweet.user.screen_name}",
-            text:               tweet.text,
-            url:                "https://www.twitter.com/#{tweet.user.screen_name}/statuses/#{tweet.id}",
-            created_at:         tweet.created_at,
-            provider:           "twitter"
-            )
-          @post.save
-        end
-      end
-      if @facebook
-        facebook_feed = facebook_client.get_connections('me', 'home')
-        facebook_feed.each do |post|
-          @post = @user.posts.build(
-            user_screen_name:   post['from']['name'],
-            user_url:           "https://www.facebook.com/#{post['from']['id']}/",
-            user_image_url:     "http://graph.facebook.com/#{post['from']['id']}/picture",
-            text:               post['message'],
-            picture_url:        post['picture'],
-            link:               post['link'],
-            name:               post['name'],
-            link_caption:       post['caption'],
-            story:              post['story'],
-            url:                "https://www.facebook.com/#{post['id']}/",
-            created_at:         DateTime.parse(post['created_time']),
-            provider:           "facebook"
-            )
-          @post.save
-        end
-      end
-      @user.update_attribute(:feed_updated_at, Time.now)
+      Post.refresh_cache!(@user)
+      @posts = @user.posts.all.sort_by(&:created_at).reverse
     end
 end
