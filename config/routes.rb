@@ -1,8 +1,4 @@
-require 'resque_web'
-
 Okayfeed::Application.routes.draw do
-  ResqueWeb::Engine.eager_load!
-  mount ResqueWeb::Engine => "/resque_web"
   devise_for :users, controllers: { registrations: 'registrations' }
   resources :users, only: [:show, :publish] do
     member do

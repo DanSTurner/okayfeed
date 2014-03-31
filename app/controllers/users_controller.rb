@@ -27,7 +27,6 @@ class UsersController < ApplicationController
   end
 
   def background_refresh
-    # Resque.enqueue(BackgroundRefresh, @user.id.to_s)
     BackgroundRefresh.new.async.perform(@user.id.to_s)
     render :nothing => true
   end
