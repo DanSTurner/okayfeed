@@ -19,6 +19,7 @@ gem 'omniauth-flickr', '~> 0.0.13'
 gem 'resque', '~> 1.25.2'
 gem 'resque-web', '~> 0.0.5', require: 'resque_web'
 gem 'foreman', '~> 0.63.0'
+gem 'sucker_punch', '~> 1.0.3'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'

@@ -1,3 +1,4 @@
+# require './workers/background_refresh'
 class UsersController < ApplicationController
   before_action :set_user,             only: [:show, :publish, :background_refresh]
   before_action :set_authorizations,   only: [:show, :publish]
@@ -26,7 +27,8 @@ class UsersController < ApplicationController
   end
 
   def background_refresh
-    Resque.enqueue(BackgroundRefresh, @user.id.to_s)
+    # Resque.enqueue(BackgroundRefresh, @user.id.to_s)
+    BackgroundRefresh.new.async.perform(@user.id.to_s)
     render :nothing => true
   end
 
