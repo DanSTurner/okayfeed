@@ -1,0 +1,10 @@
+development:
+  server: "http://okayfeed-messaging.herokuapp.com/faye"
+  secret_token: ENV['PRIVATE_PUB_KEY']
+test:
+  server: "http://okayfeed-messaging.herokuapp.com/faye"
+  secret_token: ENV['PRIVATE_PUB_KEY']
+production:
+  server: "http://okayfeed-messaging.herokuapp.com/faye"
+  secret_token: ENV['PRIVATE_PUB_KEY']
+  signature_expiration: 3600 # one hour

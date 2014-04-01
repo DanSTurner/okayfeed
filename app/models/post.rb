@@ -47,6 +47,11 @@ class Post < ActiveRecord::Base
     end
   end
 
+  def self.cache_refreshed?(user)
+    self.set_user(user)
+    (Time.now - @user.feed_updated_at) / 60 < 1 ? true : false
+  end
+
   private
     def self.set_user(user)
       @user = user

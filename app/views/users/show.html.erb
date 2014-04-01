@@ -44,6 +44,10 @@
     <%= f.submit "Publish", class: "btn btn-default" %><br><br>
   <% end %>
 
+  <div id="new" style="display:none">
+    <%= link_to 'New posts, click to refresh', user_path(@user) %>
+  </div>
+
   <% unless @posts.empty? %>
     <% @posts.each do |post| %>
       <div class="panel panel-default">
@@ -107,4 +111,8 @@
         <% end %>
       </ul>
   <% end %>
+<% end %>
+
+<% if current_user == @user %>
+  <%= subscribe_to "/messages/#{@user.id}" %>
 <% end %>

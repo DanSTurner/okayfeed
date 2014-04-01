@@ -17,6 +17,8 @@ gem 'omniauth-facebook', '~> 1.6.0'
 gem 'flickraw', '~> 0.9.7'
 gem 'omniauth-flickr', '~> 0.0.13'
 gem 'sucker_punch', '~> 1.0.3'
+gem 'thin', '~> 1.6.2'
+gem 'private_pub', '~> 1.0.3'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'
