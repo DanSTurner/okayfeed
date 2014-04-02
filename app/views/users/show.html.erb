@@ -1,3 +1,4 @@
+<div class="row">
 <h1><%= @user.email %></h1>
 <% if @user.authorizations.empty? && @user == current_user %>
   No linked accounts
@@ -20,6 +21,7 @@
     </div>
   </div>
 <% else %>
+  <div class="col-md-4">
   <%= form_for @user, url: publish_user_path(current_user), method: :post, :html => { :multipart => true }, class: "form" do |f| %>
     <div class="form-group">
       <%= text_area_tag :content, nil, class: "form-control" %>
@@ -43,9 +45,12 @@
     <br><br>
     <%= f.submit "Publish", class: "btn btn-default" %><br><br>
   <% end %>
+  </div>
 
-  <div id="new" style="display:none">
-    <%= link_to 'New posts, click to refresh', user_path(@user) %>
+  <div class="col-md-8">
+  <div id="new_posts_notification" style="display:none;" class="alert alert-info alert-dismissable center-block">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <%= link_to 'Okay! There are new posts.', user_path(@user), class: "alert-link" %>
   </div>
 
   <% unless @posts.empty? %>
@@ -89,6 +94,7 @@
       </div>
     <% end %>
   <% end %>
+  </div>
   <script type="text/javascript">
     $(document).ready(function () {
           setInterval(function() {
@@ -116,3 +122,4 @@
 <% if current_user == @user %>
   <%= subscribe_to "/messages/#{@user.id}" %>
 <% end %>
+</div>

@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 //= require private_pub
-//= require bootstrap/modal
+//= require bootstrap
 $(document).ready ->
   $('#myModal').modal 'show'
   return
