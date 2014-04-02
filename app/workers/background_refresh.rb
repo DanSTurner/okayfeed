@@ -8,7 +8,6 @@ class BackgroundRefresh
       Post.refresh_cache!(current_user)
       new_most_recent = current_user.posts.all.sort_by(&:created_at).reverse.first.created_at
       unless new_most_recent == most_recent
-        # raise ArgumentError
         PrivatePub.publish_to("/messages/#{user_id}", "$('#new_posts_notification').show();")
       end
     end
