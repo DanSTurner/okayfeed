@@ -1,20 +1,21 @@
-<div class="row">
 <h1><%= @user.email %></h1>
 <% if @user.authorizations.empty? && @user == current_user %>
-  No linked accounts
-  <div class="modal" id="myModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h4 class="modal-title">No linked accounts</h4>
-        </div>
-        <div class="modal-body">
-          Link an account to start using OkayFeed.<br><br>
-          <div class="text-center">
-            <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default btn-lg" %>
-            <br><br>
-            <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default btn-lg" %>
+  <div class="col-md-12">
+    No linked accounts
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">No linked accounts</h4>
+          </div>
+          <div class="modal-body">
+            Link an account to start using OkayFeed.<br><br>
+            <div class="text-center">
+              <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default btn-lg" %>
+              <br><br>
+              <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default btn-lg" %>
+            </div>
           </div>
         </div>
       </div>
@@ -22,78 +23,78 @@
   </div>
 <% else %>
   <div class="col-md-4">
-  <%= form_for @user, url: publish_user_path(current_user), method: :post, :html => { :multipart => true }, class: "form" do |f| %>
-    <div class="form-group">
-      <%= text_area_tag :content, nil, class: "form-control" %>
-    </div>
-    <% if @twitter %>
-      <div class="checkbox">
-          <%= check_box_tag 'provider[]', 'twitter' %>
-          <%= label_tag 'twitter' %>
+    <%= form_for @user, url: publish_user_path(current_user), method: :post, :html => { :multipart => true }, class: "form" do |f| %>
+      <div class="form-group">
+        <%= text_area_tag :content, nil, class: "form-control" %>
       </div>
-    <% end %>
-    <% if @facebook %>
-      <div class="checkbox">
-          <%= check_box_tag 'provider[]', 'facebook' %>
-          <%= label_tag 'facebook' %>
+      <% if @twitter %>
+        <div class="checkbox">
+            <%= check_box_tag 'provider[]', 'twitter' %>
+            <%= label_tag 'twitter' %>
+        </div>
+      <% end %>
+      <% if @facebook %>
+        <div class="checkbox">
+            <%= check_box_tag 'provider[]', 'facebook' %>
+            <%= label_tag 'facebook' %>
+        </div>
+      <% end %>
+      <div class="btn btn-default btn-file">
+        <%= label_tag 'image', 'Include image' %>
+        <%= file_field_tag 'image' %>
       </div>
+      <br><br>
+      <%= f.submit "Publish", class: "btn btn-default" %><br><br>
     <% end %>
-    <div class="btn btn-default btn-file">
-      <%= label_tag 'image', 'Include image' %>
-      <%= file_field_tag 'image' %>
-    </div>
-    <br><br>
-    <%= f.submit "Publish", class: "btn btn-default" %><br><br>
-  <% end %>
   </div>
 
   <div class="col-md-8">
-  <div id="new_posts_notification" style="display:none;" class="alert alert-info alert-dismissable center-block">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <%= link_to 'Okay! There are new posts.', user_path(@user), class: "alert-link" %>
-  </div>
+    <div id="new_posts_notification" style="display:none;" class="alert alert-info alert-dismissable center-block">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= link_to 'Okay! There are new posts.', user_path(@user), class: "alert-link" %>
+    </div>
 
-  <% unless @posts.empty? %>
-    <% @posts.each do |post| %>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <%= link_to post[:user_url], target: '_blank' do %>
-            <%= image_tag post[:user_image_url], style: "float: left; padding-right: 10px; max-width:50px; max-height:50px;" %>
-            <strong><%= post[:user_screen_name] %></strong><br>
-            <% if post[:user_name].nil? %>
-              <i class="fa fa-<%= post[:provider] %> pull-right"></i>
-              <br>
-            <% else %>
-              <%= "@" + post[:user_name] %> <i class="fa fa-<%= post[:provider] %> pull-right"></i>
+    <% unless @posts.empty? %>
+      <% @posts.each do |post| %>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <%= link_to post[:user_url], target: '_blank' do %>
+              <%= image_tag post[:user_image_url], style: "float: left; padding-right: 10px; max-width:50px; max-height:50px;" %>
+              <strong><%= post[:user_screen_name] %></strong><br>
+              <% if post[:user_name].nil? %>
+                <i class="fa fa-<%= post[:provider] %> pull-right"></i>
+                <br>
+              <% else %>
+                <%= "@" + post[:user_name] %> <i class="fa fa-<%= post[:provider] %> pull-right"></i>
+              <% end %>
             <% end %>
-          <% end %>
-        </div>
-        <div class="panel-body">
-          <%= post[:text] %><br><br>
-          <% unless post[:picture_url].nil? %>
-            <%= image_tag post[:picture_url] %><br><br>
-          <% end %>
-          <% unless post[:link].nil? %>
-            <div>
+          </div>
+          <div class="panel-body">
+            <%= post[:text] %><br><br>
+            <% unless post[:picture_url].nil? %>
+              <%= image_tag post[:picture_url] %><br><br>
+            <% end %>
+            <% unless post[:link].nil? %>
+              <div>
 
-              <%= link_to post[:name], post[:link] %><br>
-              <%= post[:link_caption] %>
-            </div><br>
-          <% end %>
-          <% unless post[:story].nil? %>
-            <%= post[:story] %><br><br>
-          <% end %>
-          <%= link_to post[:url] do %>
-            <% if post[:created_at] > Time.now.beginning_of_day %>
-                <%= "#{time_ago_in_words(post[:created_at])} ago" %>
-            <% else %>
-                <%= post[:created_at].strftime("%b %d") %>
+                <%= link_to post[:name], post[:link] %><br>
+                <%= post[:link_caption] %>
+              </div><br>
             <% end %>
-          <% end %>
+            <% unless post[:story].nil? %>
+              <%= post[:story] %><br><br>
+            <% end %>
+            <%= link_to post[:url] do %>
+              <% if post[:created_at] > Time.now.beginning_of_day %>
+                  <%= "#{time_ago_in_words(post[:created_at])} ago" %>
+              <% else %>
+                  <%= post[:created_at].strftime("%b %d") %>
+              <% end %>
+            <% end %>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
-  <% end %>
   </div>
   <script type="text/javascript">
     $(document).ready(function () {
@@ -122,4 +123,3 @@
 <% if current_user == @user %>
   <%= subscribe_to "/messages/#{@user.id}" %>
 <% end %>
-</div>
