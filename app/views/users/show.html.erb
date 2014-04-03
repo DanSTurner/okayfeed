@@ -51,7 +51,9 @@
   <div class="col-md-8">
     <div id="new_posts_notification" style="display:none;" class="alert alert-info alert-dismissable center-block">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <%= link_to 'Okay! There are new posts.', user_path(@user), class: "alert-link" %>
+      <%= link_to user_path(@user), class: "alert-link" do %>
+        Okay! There are <span id="new_posts_count"></span> new posts.
+      <% end %>
     </div>
 
     <% unless @posts.empty? %>

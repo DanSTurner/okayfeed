@@ -42,7 +42,6 @@ class Post < ActiveRecord::Base
           @post.save
         end
       end
-
       @user.update_attribute(:feed_updated_at, Time.now)
     end
   end
