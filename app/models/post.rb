@@ -5,7 +5,7 @@ class Post < ActiveRecord::Base
     self.set_user(user)
     self.set_authorizations
     if self.cache_stale?
-      @user.posts.all.each { |item| item.destroy }
+      @user.posts.delete_all
       if @twitter
         tweets = self.twitter_client.home_timeline
         tweets.each do |tweet|

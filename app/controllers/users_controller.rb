@@ -28,7 +28,7 @@ class UsersController < ApplicationController
 
   def background_refresh
     BackgroundRefresh.new.async.perform(@user.id.to_s)
-    render :nothing => true
+    render nothing: true
   end
 
   private
