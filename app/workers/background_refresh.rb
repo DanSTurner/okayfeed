@@ -12,7 +12,7 @@ class BackgroundRefresh
       Post.refresh_cache!(current_user)
       new_top_post_date = current_user.posts.all.sort_by(&:created_at).reverse.first.created_at
 
-      # unless new_top_post_date == old_top_post_date
+      unless new_top_post_date == old_top_post_date
         posts = current_user.posts.all.sort_by(&:created_at).reverse
         # Rails.logger.debug "#{posts_html(posts)}"
         num_of_new_messages = current_user.posts.where("created_at > ?", old_top_post_date).count
@@ -20,7 +20,7 @@ class BackgroundRefresh
         num_of_posts_text = "There #{subject_verb_agreement} #{pluralize(num_of_new_messages, 'new post')}"
 
         PrivatePub.publish_to("/messages/#{user_id}", "$('#new_posts_notification').show();document.getElementById('new_posts_count').innerHTML = '#{num_of_posts_text}';$('.posts').html(#{posts_html(posts).html_safe.inspect});")
-      # end
+      end
     end
   end
 
