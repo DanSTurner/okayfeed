@@ -1,43 +1,43 @@
-<% unless posts.empty? %>
-  <% posts.each do |post| %>
-    <div class="posts">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <%= link_to post[:user_url], target: '_blank' do %>
-          <%= image_tag post[:user_image_url], style: "float: left; padding-right: 10px; max-width:50px; max-height:50px;" %>
-          <strong><%= post[:user_screen_name] %></strong><br>
-          <% if post[:user_name].nil? %>
-            <i class="fa fa-<%= post[:provider] %> pull-right"></i>
-            <br>
-          <% else %>
-            <%= "@" + post[:user_name] %> <i class="fa fa-<%= post[:provider] %> pull-right"></i>
+<div class="posts">
+  <% unless posts.empty? %>
+    <% posts.each do |post| %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <%= link_to post[:user_url], target: '_blank' do %>
+            <%= image_tag post[:user_image_url], style: "float: left; padding-right: 10px; max-width:50px; max-height:50px;" %>
+            <strong><%= post[:user_screen_name] %></strong><br>
+            <% if post[:user_name].nil? %>
+              <i class="fa fa-<%= post[:provider] %> pull-right"></i>
+              <br>
+            <% else %>
+              <%= "@" + post[:user_name] %> <i class="fa fa-<%= post[:provider] %> pull-right"></i>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
-      <div class="panel-body">
-        <%= post[:text] %><br><br>
-        <% unless post[:picture_url].nil? %>
-          <%= image_tag post[:picture_url] %><br><br>
-        <% end %>
-        <% unless post[:link].nil? %>
-          <div>
+        </div>
+        <div class="panel-body">
+          <%= post[:text] %><br><br>
+          <% unless post[:picture_url].nil? %>
+            <%= image_tag post[:picture_url] %><br><br>
+          <% end %>
+          <% unless post[:link].nil? %>
+            <div>
 
-            <%= link_to post[:name], post[:link] %><br>
-            <%= post[:link_caption] %>
-          </div><br>
-        <% end %>
-        <% unless post[:story].nil? %>
-          <%= post[:story] %><br><br>
-        <% end %>
-        <%= link_to post[:url] do %>
-          <% if post[:created_at] > Time.now.beginning_of_day %>
-              <%= "#{time_ago_in_words(post[:created_at])} ago" %>
-          <% else %>
-              <%= post[:created_at].strftime("%b %d") %>
+              <%= link_to post[:name], post[:link] %><br>
+              <%= post[:link_caption] %>
+            </div><br>
           <% end %>
-        <% end %>
+          <% unless post[:story].nil? %>
+            <%= post[:story] %><br><br>
+          <% end %>
+          <%= link_to post[:url] do %>
+            <% if post[:created_at] > Time.now.beginning_of_day %>
+                <%= "#{time_ago_in_words(post[:created_at])} ago" %>
+            <% else %>
+                <%= post[:created_at].strftime("%b %d") %>
+            <% end %>
+          <% end %>
+        </div>
       </div>
-    </div>
-    </div>
+    <% end %>
   <% end %>
-<% end %>
+</div>
