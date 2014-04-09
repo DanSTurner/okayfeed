@@ -2,8 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 #new_posts_notification {
-  max-width: 300px;
   text-align: center;
-  position: fixed;
-  top: 70px;
+
 }
+ .alert {
+  margin-bottom: 10px;
+ }

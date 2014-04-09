@@ -49,8 +49,7 @@
   </div>
 
   <div class="col-md-8">
-    <div id="new_posts_notification" style="display:none;" class="alert alert-info alert-dismissable center-block">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <div id="new_posts_notification" style="display:none;" class="alert alert-info center-block">
       <a href="#" class="alert-link">
         Okay! <span id="new_posts_message"><span id="new_posts_count">0</span></span>.
       </a>
@@ -60,6 +59,7 @@
            $('.alert-link').click(function() {
                $('.new_post').slideDown(500);
                $('#new_posts_notification').hide();
+               $('#new_posts_count').text('0');
                return false;
            });
        });
