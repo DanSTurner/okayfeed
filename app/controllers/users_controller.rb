@@ -23,7 +23,10 @@ class UsersController < ApplicationController
         facebook_client.put_wall_post(content)
       end
     end
-    redirect_to user_path(@user)
+    respond_to do |format|
+      format.html { redirect_to user_path(@user) }
+      format.js
+    end
   end
 
   def background_refresh

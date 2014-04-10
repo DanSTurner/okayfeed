@@ -23,7 +23,21 @@
   </div>
 <% else %>
   <div class="col-md-4">
-    <%= form_for @user, url: publish_user_path(current_user), method: :post, :html => { :multipart => true }, class: "form" do |f| %>
+    <div id="publish_success" style="display: none;" class="alert alert-success center-block">
+      <a href="#" class="alert-link publish_success_notification_link">
+        Posted!
+      </a>
+    </div>
+    <script type="text/javascript">
+       $(function() {
+           $('.publish_success_notification_link').click(function() {
+               $('#publish_success').slideDown(500);
+               $('#publish_success').hide();
+               return false;
+           });
+       });
+    </script>
+    <%= form_for @user, remote: true, url: publish_user_path(current_user), method: :post, html: { multipart: true, name: "publish_form" } do |f| %>
       <div class="form-group">
         <%= text_area_tag :content, nil, class: "form-control" %>
       </div>
@@ -50,13 +64,13 @@
 
   <div class="col-md-8">
     <div id="new_posts_notification" style="display:none;" class="alert alert-info center-block">
-      <a href="#" class="alert-link">
+      <a href="#" class="alert-link new_post_notification_link">
         Okay! <span id="new_posts_message"><span id="new_posts_count">0</span></span>.
       </a>
     </div>
     <script type="text/javascript">
        $(function() {
-           $('.alert-link').click(function() {
+           $('.new_post_notification_link').click(function() {
                $('.new_post').slideDown(500);
                $('#new_posts_notification').hide();
                $('#new_posts_count').text('0');
