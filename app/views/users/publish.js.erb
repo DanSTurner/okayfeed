@@ -1,2 +1,7 @@
-$('#publish_success').show();
+$('#publish_notice').show();
+<% if @result %>
+  $('#publish_notice a').html('<%= raw @notice %>');
+<% else %>
+  $('#publish_notice a').text('Error publishing post.');
+<% end %>
 document.getElementsByName('publish_form')[0].reset();

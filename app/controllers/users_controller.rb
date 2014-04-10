@@ -9,18 +9,32 @@ class UsersController < ApplicationController
 
   def publish
     content = params[:content]
+    @notice = "Posting: "
     if params[:provider].include?("twitter")
-      if params[:image]
-        twitter_client.update_with_media(content, params[:image].tempfile)
-      else
-        twitter_client.update(content)
+      @notice += "<br>to twitter"
+      begin
+        if params[:image]
+          twitter_client.update_with_media(content, params[:image].tempfile)
+          @result = "success"
+        else
+          twitter_client.update(content)
+          @result = "success"
+        end
+      rescue Twitter::Error
+      rescue Exception
       end
     end
     if params[:provider].include?("facebook")
-      if params[:image]
-        facebook_client.put_picture(params[:image], {message: content})
-      else
-        facebook_client.put_wall_post(content)
+      @notice += "<br>to facebook"
+      begin
+        if params[:image]
+          facebook_client.put_picture(params[:image], {message: content})
+          @result = "success"
+        else
+          facebook_client.put_wall_post(content)
+          @result = "success"
+        end
+      rescue Koala::Facebook::APIError
       end
     end
     respond_to do |format|

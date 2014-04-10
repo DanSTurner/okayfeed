@@ -23,16 +23,15 @@
   </div>
 <% else %>
   <div class="col-md-4">
-    <div id="publish_success" style="display: none;" class="alert alert-success center-block">
-      <a href="#" class="alert-link publish_success_notification_link">
-        Posted!
+    <div id="publish_notice" style="display: none;" class="alert alert-warning center-block">
+      <a href="#" class="alert-link publish_notice_notification_link">
       </a>
     </div>
     <script type="text/javascript">
        $(function() {
-           $('.publish_success_notification_link').click(function() {
-               $('#publish_success').slideDown(500);
-               $('#publish_success').hide();
+           $('.publish_notice_notification_link').click(function() {
+               $('#publish_notice').slideDown(500);
+               $('#publish_notice').hide();
                return false;
            });
        });
