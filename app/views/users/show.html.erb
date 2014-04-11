@@ -52,6 +52,14 @@
           $('.twitter_checkbox').attr('checked', false);
           $('.twitter_checkbox').click(function() {
             $('#twitter_max_char').toggle();
+            if (this.checked == false) {
+              $("input[type=submit]").removeAttr("disabled");
+            }
+            else {
+              if ($('textarea').val().length > 140) {
+                $("input[type=submit]").attr("disabled", "true");
+              };
+            };
           });
 
           maxCharacters = 140;
