@@ -6,3 +6,15 @@
 $(document).ready ->
   $('#myModal').modal 'show'
   return
+
+# maxCharacters = 140
+# $("#count").text maxCharacters
+# $("textarea").bind "keyup keydown", ->
+#   count = $("#count")
+#   characters = $(this).val().length
+#   if characters > maxCharacters
+#     count.addClass "over"
+#   else
+#     count.removeClass "over"
+#   count.text maxCharacters - characters
+#   return

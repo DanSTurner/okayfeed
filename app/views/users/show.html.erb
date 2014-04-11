@@ -28,13 +28,13 @@
       </a>
     </div>
     <script type="text/javascript">
-       $(function() {
-           $('.publish_notice_notification_link').click(function() {
-               $('#publish_notice').slideDown(500);
-               $('#publish_notice').hide();
-               return false;
-           });
-       });
+      $(function() {
+        $('.publish_notice_notification_link').click(function() {
+          $('#publish_notice').slideDown(500);
+          $('#publish_notice').hide();
+        return false;
+        });
+      });
     </script>
     <%= form_for @user, remote: true, url: publish_user_path(current_user), method: :post, html: { multipart: true, name: "publish_form" } do |f| %>
       <div class="form-group">
@@ -42,9 +42,34 @@
       </div>
       <% if @twitter %>
         <div class="checkbox">
-            <%= check_box_tag 'provider[]', 'twitter' %>
+            <%= check_box_tag 'provider[]', 'twitter', false, class: 'twitter_checkbox' %>
             <%= label_tag 'twitter' %>
+            <div id="twitter_max_char" style="display: none;">
+              You have <strong id="count"></strong> characters remaining
+            </div>
         </div>
+        <script type="text/javascript">
+          $('.twitter_checkbox').attr('checked', false);
+          $('.twitter_checkbox').click(function() {
+            $('#twitter_max_char').toggle();
+          });
+
+          maxCharacters = 140;
+          $('#count').text(maxCharacters);
+          $('textarea').bind('keyup keydown', function() {
+            var count = $('#count');
+            var characters = $(this).val().length;
+            if (characters > maxCharacters) {
+              count.addClass('over');
+              $("input[type=submit]").attr("disabled", "true");
+            }
+            else {
+              count.removeClass('over');
+              $("input[type=submit]").removeAttr("disabled");
+            };
+            count.text(maxCharacters - characters);
+          });
+        </script>
       <% end %>
       <% if @facebook %>
         <div class="checkbox">
@@ -57,7 +82,7 @@
         <%= file_field_tag 'image' %>
       </div>
       <br><br>
-      <%= f.submit "Publish", class: "btn btn-default" %><br><br>
+      <%= f.submit "Publish", class: "btn btn-default", id: "publish" %><br><br>
     <% end %>
   </div>
 
