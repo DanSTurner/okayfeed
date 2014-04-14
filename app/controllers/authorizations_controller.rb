@@ -15,6 +15,7 @@ class AuthorizationsController < ApplicationController
   def destroy
     provider = @user.authorizations.find_by(provider: params[:provider])
     provider.destroy
+    Post.cleanse!(@user, params[:provider])
     redirect_to user_path(@user)
   end
 

@@ -9,22 +9,25 @@ class BackgroundRefresh
       old_top_post_date = current_user.posts.all.sort_by(&:created_at).reverse.first.created_at
     end
     Post.refresh_cache!(current_user)
-    new_top_post_date = current_user.posts.all.sort_by(&:created_at).reverse.first.created_at
+    if current_user.posts.any?
 
-    unless new_top_post_date == old_top_post_date
-      new_posts = current_user.posts.where("created_at > ?", old_top_post_date).sort_by(&:created_at).reverse
-      num_of_new_messages = current_user.posts.where("created_at > ?", old_top_post_date).count
+      new_top_post_date = current_user.posts.all.sort_by(&:created_at).reverse.first.created_at
 
-      PrivatePub.publish_to("/messages/#{user_id}",
-        "$('#new_posts_notification').slideDown(500);
-        var current_new_count = document.getElementById('new_posts_count').innerHTML;
-        var total_new_count = parseInt(current_new_count) + #{num_of_new_messages};
-        if(total_new_count == 1) {subject_verb_agreement_prefix = ' is ';} else {subject_verb_agreement_prefix = ' are ';};
-        if(total_new_count == 1) {correct_pluralization_postfix = ' post';} else {correct_pluralization_postfix = ' posts';};
-        var new_posts_message_text = 'There ' + subject_verb_agreement_prefix + '<span id\=\"new_posts_count\">' + total_new_count + '</span>' + ' new' + correct_pluralization_postfix;
-        $('#new_posts_message').html(new_posts_message_text);
-        $(#{posts_html(new_posts).html_safe.inspect}).insertBefore('.posts .panel:nth-child(1)');"
-        )
+      unless new_top_post_date == old_top_post_date
+        new_posts = current_user.posts.where("created_at > ?", old_top_post_date).sort_by(&:created_at).reverse
+        num_of_new_messages = current_user.posts.where("created_at > ?", old_top_post_date).count
+
+        PrivatePub.publish_to("/messages/#{user_id}",
+          "$('#new_posts_notification').slideDown(500);
+          var current_new_count = document.getElementById('new_posts_count').innerHTML;
+          var total_new_count = parseInt(current_new_count) + #{num_of_new_messages};
+          if(total_new_count == 1) {subject_verb_agreement_prefix = ' is ';} else {subject_verb_agreement_prefix = ' are ';};
+          if(total_new_count == 1) {correct_pluralization_postfix = ' post';} else {correct_pluralization_postfix = ' posts';};
+          var new_posts_message_text = 'There ' + subject_verb_agreement_prefix + '<span id\=\"new_posts_count\">' + total_new_count + '</span>' + ' new' + correct_pluralization_postfix;
+          $('#new_posts_message').html(new_posts_message_text);
+          $(#{posts_html(new_posts).html_safe.inspect}).insertBefore('.posts .panel:nth-child(1)');"
+          )
+      end
     end
   end
 

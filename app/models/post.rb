@@ -42,6 +42,22 @@ class Post < ActiveRecord::Base
           @post.save
         end
       end
+      if @flickr
+        flickr_feed = self.flickr_client.photos.getContactsPhotos(count: 30, include_self: 'include_self', extras: 'date_upload')
+        flickr_feed.each do |post|
+          @post = @user.posts.build(
+            user_screen_name:   post['username'],
+            user_url:           "http://www.flickr.com/photos/#{post['owner']}/",
+            user_image_url:     "http://flickr.com/buddyicons/#{post['owner']}.jpg",
+            text:               post['title'],
+            picture_url:        "http://farm#{post['farm']}.static.flickr.com/#{post['server']}/#{post['id']}_#{post['secret']}_n.jpg",
+            url:                "http://www.flickr.com/photos/#{post['owner']}/#{post['id']}",
+            created_at:         DateTime.parse(Time.at(post['dateupload'].to_i).to_datetime.to_s),
+            provider:           "flickr"
+            )
+          @post.save
+        end
+      end
       @user.update_attribute(:feed_updated_at, Time.now)
     end
   end
@@ -49,6 +65,13 @@ class Post < ActiveRecord::Base
   def self.cache_refreshed?(user)
     self.set_user(user)
     (Time.now - @user.feed_updated_at) / 60 < 1 ? true : false
+  end
+
+  def self.cleanse!(user, removed_provider)
+    self.set_user(user)
+    @user.posts.where(provider: removed_provider).each do |post|
+      post.destroy!
+    end
   end
 
   private
@@ -59,7 +82,7 @@ class Post < ActiveRecord::Base
     def self.set_authorizations
       @twitter  = @user.authorizations.find_by(provider: 'twitter')
       @facebook = @user.authorizations.find_by(provider: 'facebook')
-      # @flickr   = @user.authorizations.find_by(provider: 'flickr')
+      @flickr   = @user.authorizations.find_by(provider: 'flickr')
     end
 
     def self.twitter_client
@@ -73,6 +96,16 @@ class Post < ActiveRecord::Base
 
     def self.facebook_client
       @facebook_client ||= Koala::Facebook::API.new(@facebook.token)
+    end
+
+    def self.flickr_client
+      FlickRaw.api_key          = ENV["FLICKR_APP_KEY"]
+      FlickRaw.shared_secret    = ENV["FLICKR_APP_SECRET"]
+      FlickRaw.secure           = false
+      @flickr_client                ||= FlickRaw::Flickr.new
+      @flickr_client.access_token   ||= @flickr.token
+      @flickr_client.access_secret  ||= @flickr.secret
+      return @flickr_client
     end
 
     def self.cache_stale?

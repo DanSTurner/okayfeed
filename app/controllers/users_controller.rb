@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def publish
     content = params[:content]
-    @notice = "Posting: "
+    @notice = "Posted: "
     if params[:provider].include?("twitter")
       @notice += "<br>to twitter"
       begin
@@ -37,6 +37,18 @@ class UsersController < ApplicationController
       rescue Koala::Facebook::APIError
       end
     end
+    if params[:provider].include?("flickr")
+      @notice += "<br>to flickr"
+      begin
+        if params[:image]
+          flickr_client.upload_photo(params[:image].tempfile.path, title: content)
+          @result = "success"
+        else
+          # rescue FlickRaw::FailedResponse
+        end
+      rescue FlickRaw::FailedResponse
+      end
+    end
     respond_to do |format|
       format.html { redirect_to user_path(@user) }
       format.js
@@ -57,7 +69,7 @@ class UsersController < ApplicationController
     def set_authorizations
       @twitter  = @user.authorizations.find_by(provider: 'twitter')
       @facebook = @user.authorizations.find_by(provider: 'facebook')
-      # @flickr   = @user.authorizations.find_by(provider: 'flickr')
+      @flickr   = @user.authorizations.find_by(provider: 'flickr')
     end
 
     def twitter_client
@@ -73,14 +85,14 @@ class UsersController < ApplicationController
       @facebook_client ||= Koala::Facebook::API.new(@facebook.token)
     end
 
-    # def flickr_client
-    #   FlickRaw.api_key          = ENV["FLICKR_APP_KEY"]
-    #   FlickRaw.shared_secret    = ENV["FLICKR_APP_SECRET"]
-    #   @flickr_client                ||= FlickRaw::Flickr.new
-    #   @flickr_client.access_token   ||= @flickr.token
-    #   @flickr_client.access_secret  ||= @flickr.secret
-    #   return @flickr_client
-    # end
+    def flickr_client
+      FlickRaw.api_key          = ENV["FLICKR_APP_KEY"]
+      FlickRaw.shared_secret    = ENV["FLICKR_APP_SECRET"]
+      @flickr_client                ||= FlickRaw::Flickr.new
+      @flickr_client.access_token   ||= @flickr.token
+      @flickr_client.access_secret  ||= @flickr.secret
+      return @flickr_client
+    end
 
     def feed_items_cache
       Post.refresh_cache!(@user)

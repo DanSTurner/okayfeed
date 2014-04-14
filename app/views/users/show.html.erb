@@ -15,6 +15,8 @@
               <%= link_to "Authorize with Twitter", "/auth/twitter", class: "btn btn-default btn-lg" %>
               <br><br>
               <%= link_to "Authorize with Facebook", "/auth/facebook", class: "btn btn-default btn-lg" %>
+              <br><br>
+              <%= link_to "Authorize with Flickr", "/auth/flickr", class: "btn btn-default btn-lg" %>
             </div>
           </div>
         </div>
@@ -48,41 +50,17 @@
               You have <strong id="count"></strong> characters remaining
             </div>
         </div>
-        <script type="text/javascript">
-          $('.twitter_checkbox').attr('checked', false);
-          $('.twitter_checkbox').click(function() {
-            $('#twitter_max_char').toggle();
-            if (this.checked == false) {
-              $("input[type=submit]").removeAttr("disabled");
-            }
-            else {
-              if ($('textarea').val().length > 140) {
-                $("input[type=submit]").attr("disabled", "true");
-              };
-            };
-          });
-
-          maxCharacters = 140;
-          $('#count').text(maxCharacters);
-          $('textarea').bind('keyup keydown', function() {
-            var count = $('#count');
-            var characters = $(this).val().length;
-            if (characters > maxCharacters) {
-              count.addClass('over');
-              $("input[type=submit]").attr("disabled", "true");
-            }
-            else {
-              count.removeClass('over');
-              $("input[type=submit]").removeAttr("disabled");
-            };
-            count.text(maxCharacters - characters);
-          });
-        </script>
       <% end %>
       <% if @facebook %>
         <div class="checkbox">
             <%= check_box_tag 'provider[]', 'facebook' %>
             <%= label_tag 'facebook' %>
+        </div>
+      <% end %>
+      <% if @flickr %>
+        <div class="checkbox">
+            <%= check_box_tag 'provider[]', 'flickr', false, class: 'twitter_checkbox' %>
+            <%= label_tag 'flickr' %>
         </div>
       <% end %>
       <div class="btn btn-default btn-file">
@@ -92,6 +70,37 @@
       <br><br>
       <%= f.submit "Publish", class: "btn btn-default", id: "publish" %><br><br>
     <% end %>
+    <script type="text/javascript">
+      $('.twitter_checkbox').attr('checked', false);
+      $('.twitter_checkbox').attr('checked', false);
+      $('.twitter_checkbox').click(function() {
+        $('#twitter_max_char').toggle();
+        if (this.checked == false) {
+          $("input[type=submit]").removeAttr("disabled");
+        }
+        else {
+          if ($('textarea').val().length > 140) {
+            $("input[type=submit]").attr("disabled", "true");
+          };
+        };
+      });
+
+      maxCharacters = 140;
+      $('#count').text(maxCharacters);
+      $('textarea').bind('keyup keydown', function() {
+        var count = $('#count');
+        var characters = $(this).val().length;
+        if (characters > maxCharacters) {
+          count.addClass('over');
+          $("input[type=submit]").attr("disabled", "true");
+        }
+        else {
+          count.removeClass('over');
+          $("input[type=submit]").removeAttr("disabled");
+        };
+        count.text(maxCharacters - characters);
+      });
+    </script>
   </div>
 
   <div class="col-md-8">
