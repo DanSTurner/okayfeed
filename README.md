@@ -1,6 +1,15 @@
 # OkayFeed! An acceptable place to aggregate social media
 
-Welcome to my repo for OkayFeed. This app, in conjunction with [the okayfeed-messaging service](https://github.com/DanSTurner/okayfeed-messaging), provides a tool for users to log in, associate social media accounts from Facebook, Twitter and Flickr, view posts from these services in aggregate and to crosspost to them.
+Welcome to my repo for OkayFeed. This app, in conjunction with [the okayfeed-messaging service](https://github.com/DanSTurner/okayfeed-messaging), provides a tool for users to view posts from social media services in aggregate and to crosspost to them.
+
+### Features
+* User accounts
+* Email password recovery
+* Authentication with Twitter, Facebook and Flickr
+* Posting or crossposting to these services
+* Background refresh of feeds
+* Live notification and display of new posts
+
 
 ### Technologies used
 1. Rails
