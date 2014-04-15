@@ -44,11 +44,8 @@
       </div>
       <% if @twitter %>
         <div class="checkbox">
-            <%= check_box_tag 'provider[]', 'twitter', false, class: 'twitter_checkbox' %>
+            <%= check_box_tag 'provider[]', 'twitter', false, class: 'twitter_checkbox', data: {toggled: "false"} %>
             <%= label_tag 'twitter' %>
-            <div id="twitter_max_char" style="display: none;">
-              You have <strong id="count"></strong> characters remaining
-            </div>
         </div>
       <% end %>
       <% if @facebook %>
@@ -59,10 +56,13 @@
       <% end %>
       <% if @flickr %>
         <div class="checkbox">
-            <%= check_box_tag 'provider[]', 'flickr', false, class: 'twitter_checkbox' %>
+            <%= check_box_tag 'provider[]', 'flickr', false, class: 'flickr_checkbox', data: {toggled: "false"} %>
             <%= label_tag 'flickr' %>
         </div>
       <% end %>
+      <div id="max_char_notifier" style="display: none;">
+        You have <strong id="count"></strong> characters remaining
+      </div>
       <div class="btn btn-default btn-file">
         <%= label_tag 'image', 'Include image' %>
         <%= file_field_tag 'image' %>
@@ -71,23 +71,66 @@
       <%= f.submit "Publish", class: "btn btn-default", id: "publish" %><br><br>
     <% end %>
     <script type="text/javascript">
-      $('.twitter_checkbox').attr('checked', false);
-      $('.twitter_checkbox').attr('checked', false);
+      var maxCharacters = 104;
+
       $('.twitter_checkbox').click(function() {
-        $('#twitter_max_char').toggle();
-        if (this.checked == false) {
-          $("input[type=submit]").removeAttr("disabled");
+        if ($(".twitter_checkbox[data-toggled='false']").length) {
+          $('.twitter_checkbox').attr('data-toggled', true);
+          if ($(".flickr_checkbox[data-toggled='false']").length) {
+            maxCharacters = 140;
+            $('#count').text(maxCharacters - ($('textarea').val().length));
+          };
         }
         else {
-          if ($('textarea').val().length > 140) {
+          $('.twitter_checkbox').attr('data-toggled', false);
+          maxCharacters = 104;
+          $('#count').text(maxCharacters - ($('textarea').val().length));
+        };
+
+        if ($(".twitter_checkbox[data-toggled='true']").length || $(".flickr_checkbox[data-toggled='true']").length) {
+          $('#max_char_notifier').show();
+          if ($('textarea').val().length > maxCharacters) {
             $("input[type=submit]").attr("disabled", "true");
           };
+        }
+        else {
+          $('#max_char_notifier').hide();
+          $("input[type=submit]").removeAttr("disabled");
         };
       });
 
-      maxCharacters = 140;
+      $('.flickr_checkbox').click(function() {
+        if ($(".flickr_checkbox[data-toggled='false']").length) {
+          $('.flickr_checkbox').attr('data-toggled', true);
+          maxCharacters = 104;
+          $('#count').text(maxCharacters - ($('textarea').val().length));
+          if ($('#count').text() < 0) {
+            $('#count').addClass('over');
+          };
+        }
+        else {
+          $('.flickr_checkbox').attr('data-toggled', false);
+          maxCharacters = 140;
+          $('#count').text(maxCharacters - ($('textarea').val().length));
+          if ($('#count').text() >= 0) {
+            $('#count').removeClass('over');
+            $("input[type=submit]").removeAttr("disabled");
+          };
+        };
+        if ($(".twitter_checkbox[data-toggled='true']").length || $(".flickr_checkbox[data-toggled='true']").length) {
+          $('#max_char_notifier').show();
+          if ($('textarea').val().length > maxCharacters) {
+            $("input[type=submit]").attr("disabled", "true");
+          };
+        }
+        else {
+          $('#max_char_notifier').hide();
+          $("input[type=submit]").removeAttr("disabled");
+        };
+      });
+
       $('#count').text(maxCharacters);
-      $('textarea').bind('keyup keydown', function() {
+      $('textarea').on('keyup keydown', function() {
         var count = $('#count');
         var characters = $(this).val().length;
         if (characters > maxCharacters) {
