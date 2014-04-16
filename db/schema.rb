@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140320201037) do
+ActiveRecord::Schema.define(version: 20140416004936) do
 
   create_table "authorizations", force: true do |t|
     t.string   "provider"
@@ -31,14 +31,14 @@ ActiveRecord::Schema.define(version: 20140320201037) do
     t.string   "provider"
     t.string   "user_screen_name"
     t.string   "user_name"
-    t.string   "user_url"
-    t.string   "user_image_url"
+    t.text     "user_url"
+    t.text     "user_image_url"
     t.text     "text"
-    t.string   "url"
+    t.text     "url"
     t.datetime "created_at"
-    t.string   "picture_url"
-    t.string   "link"
-    t.string   "name"
+    t.text     "picture_url"
+    t.text     "link"
+    t.text     "name"
     t.text     "link_caption"
     t.text     "story"
     t.datetime "updated_at"
